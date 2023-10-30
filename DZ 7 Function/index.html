@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+<input type='number' id="firstNumber" />
+<input type='number' id="secondNumber" />
+<div id="divisionResult">
+    текст у div
+</div>
+<input type='number' id="number1" />
+<input type='number' id="number2" />
+<div id="divisionRes">
+    текст у div
+</div>
+
+<script>
+    const calcResult = () => {
+        let res= (Number(number1.value) + Number(number2.value)) / 2;
+        let result = Math.floor(firstNumber.value / secondNumber.value);
+        console.log(number1.value, number2.value, divisionRes.innerHTML);
+        console.log(firstNumber.value, secondNumber.value, divisionResult.innerHTML);
+        divisionResult.innerHTML = "Текст у <code>div</code> змінено за допомогою <strong>Javascript</strong><br/>" + result;
+        divisionRes.innerHTML = "Текст у <code>div</code> змінено за допомогою <strong>Javascript</strong><br/>" + res;
+    }
+    number1.oninput = number2.oninput = calcResult
+    firstNumber.oninput = secondNumber.oninput = calcResult
+</script>
+
+
+    <script src="index.js"></script>
+</body>
+
+</html>
