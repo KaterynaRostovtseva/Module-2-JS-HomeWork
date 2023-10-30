@@ -53,15 +53,18 @@ alert("Обмінена сума в іншій валюті: " + exchangedAmount
 let red = prompt("Введіть значення для 'red' (0-255):");
 let green = prompt("Введіть значення для 'green' (0-255):");
 let blue = prompt("Введіть значення для 'blue' (0-255):");
-let color = "#" + (red) + (green) + (blue);
-let hex = color.toString(16);
-alert("Створений CSS-колір: " + hex);
+let color = "#" + Number(red).toString(16).padStart(2, "0") + Number(green).toString(16).padStart(2, "0") + Number(blue).toString(16).padStart(2, "0");
+
+alert("Створений CSS-колір: " + color);
 
 // 7// Number: flats
 
 let totalFloors = prompt("Введіть кількість поверхів у будинку:");
 let apartmentsPerFloor = prompt("Введіть кількість квартир на поверсі:");
 let apartmentNumber = prompt("Введіть номер квартири:");
-let entrance = Math.ceil(apartmentNumber / (totalFloors * apartmentsPerFloor));
-let floor = Math.ceil((apartmentNumber - (entrance - 1) * totalFloors * apartmentsPerFloor) / apartmentsPerFloor);
+let entrance = Math.floor((apartmentNumber - 1) / (apartmentsPerFloor * totalFloors)) + 1;
+let floor = Math.floor(((apartmentNumber - 1) % (apartmentsPerFloor * totalFloors)) / apartmentsPerFloor) + 1;
 alert("Квартира номер " + apartmentNumber + " знаходиться у під'їзді " + entrance + " на " + floor + " поверсі.");
+
+
+
