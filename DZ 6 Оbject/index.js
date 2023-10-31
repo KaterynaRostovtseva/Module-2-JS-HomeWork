@@ -382,5 +382,4 @@ persons.forEach(person => {
 });
 
 tableHTML += '</table>';
-
 document.write(tableHTML);
