@@ -161,15 +161,15 @@ let persons = [
     {name: "Яків", age: 12},
 ]
 
-const sortObj = (arr, kay, bool) => {
+const sortObj = (arr, key, bool) => {
     let sortedObj;
     const age = (a,b) => a.age>b.age ? 1 : -1;
     const nameSortDecrease = (a,b) => a.name<b.name ? 1 : -1;
     const nameSortIncrease = (a,b) => a.name>b.name ? 1 : -1;
-    if(kay === 'age') {
+    if(key === 'age') {
         sortedObj = arr.sort(age);
     }
-    else if(kay === 'name' ) {
+    else if(key === 'name' ) {
         if(bool === true || bool === undefined) {
             sortedObj = arr.sort(nameSortIncrease);
         }
@@ -184,8 +184,107 @@ const sortObj = (arr, kay, bool) => {
 sortObj(persons, "age"); //сортує за віком за зростанням
 sortObj(persons, "name", false); //сортує на ім'я за спаданням
 
-// 13 // Divide (завдання зроблене у HTML)
-// 14 // Calc Func
+
+// 13 // Table
+
+const persons = [
+    {
+        name: 'Марія',
+        fatherName: 'Іванівна',
+        surname: 'Іванова',
+        sex: 'female'
+    },
+    {
+        name: 'Миколай',
+        fatherName: 'Іванович',
+        surname: 'Іванов',
+        age: 15
+    },
+    {
+        name: 'Петро',
+        fatherName: 'Іванович',
+        surname: 'Іванов',
+        married: true
+    },
+];
+
+
+function displaySortedTable(data, sortBy, sortOrder) {
+    let sortedData = [...data];
+    sortedData = sortedData.map(i => {
+        if(i.sex === undefined) {
+            i.sex = '';
+        }
+        if(i.age === undefined) {
+            i.age = null;
+        }
+        if(i.married === undefined) {
+            i.married = null;
+        }
+        return i;
+    })
+
+    let sortedRes;
+    const sortDecrease = (a,b) => {
+        if (a[sortBy] < b[sortBy]) {
+            return 1 ;
+        }
+        if (a[sortBy] > b[sortBy]) {
+            return -1 ;
+        }
+        return 0;
+    }
+    const sortIncrease = (a,b) => {
+        if (a[sortBy] > b[sortBy]) {
+            return 1 ;
+        }
+        if (a[sortBy] < b[sortBy]) {
+            return -1 ;
+        }
+        return 0;
+    }
+    if(sortOrder === true || sortOrder === undefined) {
+        sortedRes = sortedData.sort(sortIncrease);
+    }
+    else if(sortOrder === false) {
+        sortedRes = sortedData.sort(sortDecrease);
+    }
+    
+    const columns = [];
+    sortedRes.forEach(person => {
+        for (const key in person){
+            if (!columns.includes(key)) {
+                columns.push(key);
+            }
+        }
+    
+    });
+
+    let tableHTML = '<table border="1">';
+    tableHTML += '<tr>';
+    columns.forEach(column => {
+        tableHTML += `<th>${column}</th>`;
+    });
+
+    tableHTML += '</tr>';
+
+    sortedRes.forEach(person => {
+        tableHTML += '<tr>';
+        columns.forEach(column => {
+            tableHTML += `<td>${person[column] || ''}</td>`;
+        });
+        tableHTML += '</tr>';
+    });
+
+    tableHTML += '</table>';
+
+    document.write(tableHTML);
+
+}
+displaySortedTable(persons, 'sex', true)
+
+14 // Divide (завдання зроблене у HTML)
+15 // Calc Func
 
 const calcFunc = (number1, number2)=> {
     let result= (number1 + number2)  / 2;
@@ -194,7 +293,4 @@ const calcFunc = (number1, number2)=> {
 const average = calcFunc(10,2);
 console.log(average);
 
-// /15 / Calc Live (завдання зроблене у HTML)
-
-
-
+// /16 / Calc Live (завдання зроблене у HTML)

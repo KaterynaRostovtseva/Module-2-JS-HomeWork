@@ -1,4 +1,4 @@
-// 1// Literals
+// // // 1// Literals
 
 const car = {
     make: 'Toyota',
@@ -15,30 +15,31 @@ const smartphone = {
 
 console.log(smartphone);
 
-// 2// Literals expand
+// // 2// Literals expand
 
 const car = {
     make: 'Toyota',
     model: 'Camry',
     year: 2022,
     color: 'silver',
-    additionalProperty1: prompt('Введіть назву першої додаткової властивості:'),
-    additionalValue1: prompt('Введіть значення для першої додаткової властивості:')
 };
 
-console.log(car);
+const obj = {}; 
 
-const smartphone = {
-    brand: 'Apple',
-    model: 'iPhone 13',
-    operatingSystem: 'iOS',
-    additionalProperty2: prompt('Введіть назву другої додаткової властивості:'),
-    additionalValue2: prompt('Введіть значення для другої додаткової властивості:')
+const key1 = prompt('Введіть назву першої додаткової властивості:');
+const value1 = prompt('Введіть значення для першої додаткової властивості:');
+
+if (key1 && value1) {
+    obj[key1] = value1;
+    alert('Додано властивість ' + key1 + ' зі значенням ' + value1 + ' до об\'єкта.');
+} else {
+    alert('Ви не ввели назву ключа або значення.');
 }
 
-console.log(smartphone);
+console.log(obj);
 
-// 3// Literals copy
+
+// // 3// Literals copy
 
 const newProperty = prompt('Введіть назву нової властивості:');
 const newValue = prompt('Введіть значення для нової властивості:');
@@ -53,7 +54,7 @@ newObj[newProperty] = newValue;
 
 console.log(newObj);
 
-// 4// Html tree
+// // 4// Html tree
 
 let tree = {
     "tagName": "body",
@@ -131,21 +132,17 @@ tree.children.forEach(child => {
 // 6// Change OK
 
 const newIdValue = prompt('Введіть нове значення для атрибута "id" тега "button":');
+const okButton = tree.children[1].children[0].attrs;
 
-for (const div of tree.children) {
-  if (div.tagName === 'div' && div.children) {
-    for (const button of div.children) {
-      if (button.tagName === 'button' && button.attrs && button.attrs.id === 'ok') {
-        button.attrs.id = newIdValue;
-        break; 
-      }
-    }
-  }
+if (newIdValue) {
+    okButton.id = newIdValue;
+    alert('Атрибут "id" кнопки "OK" було змінено на: ' + newIdValue);
+} else {
+    alert('Ви не ввели нове значення для атрибута "id".');
 }
 
-console.log(tree); 
 
-// 7// Destructure
+// // 7// Destructure
 
 const { children } = tree;
 const [firstDiv, secondDiv] = children;
@@ -172,7 +169,7 @@ const { attrs: { id: secondInputId2 } } = secondInput;
 
 console.log(secondInputId2); 
 
-// 8// Destruct array
+// // 8// Destruct array
 
 let arr = [1, 2, 3, 4, 5, "a", "b", "c"];
 
@@ -182,7 +179,7 @@ console.log(even1, even2);
 console.log(odd1, odd2, odd3);
 console.log(letters);
 
-// 9// Destruct string
+// // 9// Destruct string
 
 let arr1 = [1, "abc"];
 const [number] = arr1;
@@ -194,7 +191,7 @@ console.log(s1);
 console.log(s2);
 console.log(s3);
 
-// 10// Destruct 2
+// // 10// Destruct 2
 
 let obj = {
     name: 'Ivan',
@@ -214,7 +211,7 @@ let {name: name1} = obj1;
 let {name: name2} = obj2;
 console.log(name1, name2);
 
-// 11// Destruct 3
+// // 11// Destruct 3
 
 let array = [1,2,3,4, 5,6,7,10];
 const [a, b, ...rest] = array;
@@ -238,7 +235,7 @@ const { [keyToRemove]: removedKey, ...rest } = smartphone;
 
 console.log(rest);
 
-// 13// Currency real rate
+// // 13// Currency real rate
 
 const inputCurrency = prompt('Введіть валюту, яку ви конвертуєте:').toUpperCase();
 const outputCurrency = prompt('Введіть валюту, в яку ви конвертуєте:').toUpperCase();
@@ -268,7 +265,7 @@ fetch('https://open.er-api.com/v6/latest/USD').then(res => res.json())
 })
   
 
-// 14// Currency drop down
+// // // 14// Currency drop down
 
 fetch('https://open.er-api.com/v6/latest/USD').then(res => res.json())
     .then(data => {
@@ -281,7 +278,7 @@ fetch('https://open.er-api.com/v6/latest/USD').then(res => res.json())
         document.write(select);
     })
 
-//  15 // Currency table
+// // //  15 // Currency table
 
 fetch('https://open.er-api.com/v6/latest/USD').then(res => res.json())
     .then(data => {
@@ -317,7 +314,7 @@ fetch('https://open.er-api.com/v6/latest/USD').then(res => res.json())
         document.write(str);
     })
 
-// 16// Form
+// // // 16// Form + Html файл
 
 const product = {
     name: "Smartphone",
@@ -333,3 +330,57 @@ console.log(typeof product. model);
 console.log(typeof product.operatingSystem);
 console.log(typeof product. color);
 console.log(typeof product. price);
+
+// // 17 // Table
+
+const persons = [
+    {
+        name: 'Марія',
+        fatherName: 'Іванівна',
+        surname: 'Іванова',
+        sex: 'female'
+    },
+    {
+        name: 'Миколай',
+        fatherName: 'Іванович',
+        surname: 'Іванов',
+        age: 15
+    },
+    {
+        name: 'Петро',
+        fatherName: 'Іванович',
+        surname: 'Іванов',
+        married: true
+    },
+]
+
+const columns = [];
+persons.forEach(person => {
+    for (const key in person){
+        if (!columns.includes(key)) {
+            columns.push(key);
+          
+        }
+    }
+   
+});
+
+let tableHTML = '<table border="1">';
+tableHTML += '<tr>';
+columns.forEach(column => {
+    tableHTML += `<th>${column}</th>`;
+});
+
+tableHTML += '</tr>';
+
+persons.forEach(person => {
+    tableHTML += '<tr>';
+    columns.forEach(column => {
+        tableHTML += `<td>${person[column] || ''}</td>`;
+    });
+    tableHTML += '</tr>';
+});
+
+tableHTML += '</table>';
+
+document.write(tableHTML);
