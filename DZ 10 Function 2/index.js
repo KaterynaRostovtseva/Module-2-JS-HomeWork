@@ -68,7 +68,7 @@ function capitalize() {
 
 capitalize();
 
-// // 2 createPerson
+// 2 createPerson
 
 function createPerson(name, surname){
 return{
@@ -94,7 +94,7 @@ console.log(b.getFullName()) //Ганна Іванова
 console.log(c.getFullName()) //Єлизавета Петрова
 
 
-// // 3 createPersonClosure
+// 3 createPersonClosure
 
 function createPersonClosure(name, surname) {
     let age;
@@ -194,7 +194,7 @@ b.setFullName("Петрова Ганна Миколаївна");
 console.log(b.getFatherName()); // Миколаївна
 
 
-// // 4 createPersonClosureDestruct
+// 4 createPersonClosureDestruct
 
 
 function createPersonClosureDestruct({
@@ -292,7 +292,7 @@ console.log(a.getFullName()); // Вася Пупкін
 console.log(b.getName(), b.setAge()); // Миколай 75
 
 
-// // 5 isSorted
+// 5 isSorted
 
 function isSorted(...args) {
     if (args.length <= 1) {
@@ -311,7 +311,7 @@ function isSorted(...args) {
 console.log(isSorted(1, 2, 3, 4)); // true
 console.log(isSorted(1, 3, 2, 4)); // false
 
-// // 6 Test isSorted
+// 6 Test isSorted
 
 let myArray = [];
 
@@ -478,58 +478,12 @@ function personForm(parent, person) {
 const b = createPersonClosure("Ганна", "Іванова");
 b.setAge(15)
 b.setFullName("Петрова Ганна Миколаївна")
-// console.log(b)
+console.log(b)
 
 personForm(document.body, person);
 
 
 // 8 getSetForm
-
-function getSetForm(parent, getSet) {
-    const inputs = {}; 
-
-    const updateInputs = () => {
-        for (const field in inputs) {
-            const getMethodName = `get${field}`;
-            const setMethodName = `set${field}`;
-            const input = inputs[field];
-
-            if (getSet.hasOwnProperty(getMethodName) && getSet.hasOwnProperty(setMethodName)) {
-               
-                input.value = getSet[getMethodName]();
-
-          
-                input.oninput = () => {
-                    const newValue = input.value;
-                    getSet[setMethodName](newValue);
-                    input.value = getSet[getMethodName]();
-                    updateInputs(); 
-                };
-            } else {
-              
-                input.disabled = true;
-            }
-        }
-    };
-
-    for (const getSetName in getSet) {
-        if (typeof getSet[getSetName] === 'function') {
-            const isGet = getSetName.startsWith('get');
-            const fieldName = getSetName.slice(3);
-
-            if (isGet) {
-                const input = document.createElement('input');
-                input.placeholder = fieldName;
-                parent.appendChild(input);
-
-                inputs[fieldName] = input;
-            }
-        }
-    }
-
-    updateInputs();
-}
-
 
 let car;
 {
@@ -569,5 +523,48 @@ let car;
     };
 }
 
+
+function getSetForm(parent, getSet) {
+    const inputs = {}; // Реєстр
+
+    const updateInputs = () => {
+        for (const key in inputs) {
+            const input = inputs[key];
+            const getMethodName = `get${key}`;
+            if (getMethodName in getSet) {
+                const value = getSet[getMethodName]();
+                input.value = value;
+            }
+        }
+    };
+
+    for (const getSetName in getSet) {
+        const isGet = getSetName.slice(0, 3) === 'get';
+        const fieldName = getSetName.slice(3); 
+        const setKey = `set${fieldName}`;
+        const getKey = `get${fieldName}`;
+
+        if (isGet) {
+            const input = document.createElement('input');
+            input.type = 'text'; 
+
+            input.oninput = () => {
+                if (setKey in getSet) {
+                    const inputValue = input.value;
+                    getSet[setKey](inputValue);
+                    updateInputs(); 
+                }
+            };
+            
+            inputs[fieldName] = input;
+
+            parent.appendChild(input);
+        }
+    }
+
+    updateInputs();
+}
+
 getSetForm(document.body, car);
 
+getSetForm(document.body, createPersonClosure('Анон', 'Анонов'));
