@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title id="cash">Каса - 0 грн</title>
+    <link rel="stylesheet" href="style.css">
+
+</head>
+<body>
+ 
+      <table>
+        <caption>Список наявності товарів в магазині</caption>
+        <thead>
+          <tr>
+            <th>Назва товару</th>
+            <th>Кількість в наявності<br>(пар)</th>
+            <th>Ціна за пару<br>(грн)</th>
+          </tr>
+        </thead>
+        <tr id="product1">
+          <td>Перчатки боксерські TWINS</td>
+          <td id="quantity">16</td>
+          <td id="price">4725</td>
+        </tr> 
+        <tr id="product2">
+          <td>Перчатки боксерські FAIRTEX</td>
+          <td id="quantity">5</td>
+          <td id="price">4500</td>
+        </tr>
+        <tr id="product3">
+          <td>Перчатки боксерські REVES</td>
+          <td id="quantity">8</td>
+          <td id="price">4700</td>
+        </tr> 
+        <tr id="product4">
+          <td>Перчатки боксерські BOYKO</td>
+          <td id="quantity">18</td>
+          <td id="price">4225</td>
+        </tr> 
+        <tr id="product5">
+          <td>Перчатки боксерські TOP-TEN</td>
+          <td id="quantity">5</td>
+          <td id="price">3725</td>
+        </tr> 
+        <tr id="product6">
+            <td>Перчатки боксерські RAVEL</td>
+            <td id="quantity">10</td>
+            <td id="price">3525</td>
+          </tr> 
+
+        </table>
+   
+        <form id="purchaseForm">
+            <label for="productSelect">Виберіть товар:</label>
+            <select id="productSelect" name="product">
+              <option value="product1">Перчатки боксерські TWINS</option>
+              <option value="product2">Перчатки боксерські FAIRTEX</option>
+              <option value="product3">Перчатки боксерські REVES</option>
+              <option value="product4">Перчатки боксерські BOYKO</option>
+              <option value="product5">Перчатки боксерські TOP-TEN</option>
+              <option value="product6">Перчатки боксерські RAVEL</option>
+            </select>
+        
+            <label for="quantityInput">Кількість:</label>
+            <input type="number" id="quantityInput" name="quantity" min="1" value="1">
+
+            <label for="moneyInput">Гроші:</label>
+            <input type="number" id="moneyInput" name="money" min="0" value="0">
+        
+            <button type="button" onclick="buyButtonClick()">Купити</button>
+        </form>
+
+        
+  
+        
+
+
+    <script src="index.js"></script>
+</body>
+</html>
