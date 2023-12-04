@@ -52,10 +52,10 @@ console.log(b.getFullName()) // Ганна Іванова
 
 
 
-// Store // Перероблений конструктор в попередньому ДЗ по кіоску працює
+// Store // 
 
 
-function Store(reducer){
+function createStore(reducer){
     let state       = reducer(undefined, {}) //стартова ініціалізація стану, запуск редьюсера зі state === undefined
     let cbs         = []                     //масив пiдписникiв
 
@@ -70,12 +70,14 @@ function Store(reducer){
             for (let cb of cbs)  cb() //та запускаємо пiдписникiв
         }
     }
-
-    return {
-        getState, //додавання функції getState в результуючий об'єкт
-        dispatch,
-        subscribe //додавання subscribe в об'єкт
-    }
+     // Конструктор Store
+     function Store() {
+        this.subscribe = subscribe;
+        this.dispatch = dispatch;
+        this.getState = getState;
+      }
+      const store = new Store();
+      return store;
 }
 
 
