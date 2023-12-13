@@ -1,4 +1,4 @@
-// Person Constructor
+// // Person Constructor
 
 function Person(name, surname) {
 
@@ -24,7 +24,7 @@ console.log(c.getFullName()) //Єлизавета Петрова
 console.log(b.getFullName()) // Ганна Іванова
 
 
-// Person Prototype
+// // Person Prototype
 
 function Person(name, surname) {
 
@@ -52,7 +52,7 @@ console.log(b.getFullName()) // Ганна Іванова
 
 
 
-// Store // 
+// // Store // 
 
 
 function createStore(reducer){
@@ -81,7 +81,7 @@ function createStore(reducer){
 }
 
 
-// Password
+// // Password
 
 function Password(parent, open) {
     this.parent = parent;
@@ -150,7 +150,7 @@ console.log(p.getOpen());
 
 
 
-// // // LoginForm
+// //  LoginForm
 
 function LoginForm(parent) {
     const password = new Password(parent, true)
@@ -191,40 +191,42 @@ loginForm.loginButtonState()
 
 function LoginFormConstructor(parent) {
     const password = new Password(parent, true)
+
+    this.passwordInput = password.passwordInput;
    
-    const usernameInput = document.createElement('input');
-    usernameInput.type = 'text';
-    usernameInput.placeholder = 'Логін';
+    this.usernameInput = document.createElement('input');
+    this.usernameInput.type = 'text';
+    this.usernameInput.placeholder = 'Логин';
 
-    const loginButton = document.createElement('button');
-    loginButton.innerText = 'Увійти';
-    loginButton.disabled = true; // Початково вимикаємо кнопку
+    this.loginButton = document.createElement('button');
+    this.loginButton.innerText = 'Войти';
+    this.loginButton.disabled = true; // Початково вимикаємо кнопку
 
-    loginButton.addEventListener('click', () => {
-        const login = usernameInput.value;
+    this.loginButton.addEventListener('click', () => {
+        const login =  this.usernameInput .value;
         const pas = password.getValue();
        console.log (`Логін: ${login}, Пароль: ${pas}`);
     });
    
-     this.loginButtonState = function() {
-        usernameInput.addEventListener('input', function(event) {
-            loginButton.disabled = (usernameInput.value == '' || password.getValue() === '');
+    this.loginButtonState = function () {
+        this.usernameInput.addEventListener('input', () => {
+            this.loginButton.disabled = this.usernameInput.value === '' || this.passwordInput.value === '';
         });
-        password.passwordInput.addEventListener('input', function(event) {
-            loginButton.disabled = (password.getValue() === '' || usernameInput.value == '');
-          }); 
+        this.passwordInput.addEventListener('input', () => {
+            this.loginButton.disabled = this.passwordInput.value === '' || this.usernameInput.value === '';
+        });
        
     };
 
-    parent.appendChild(usernameInput);
-    parent.appendChild(loginButton);
+    parent.appendChild( this.usernameInput);
+    parent.appendChild( this.loginButton);
 
     this.getUsername = function () {
-        return usernameInput.value;
+        return this.usernameInput.value;
     };
 
     this.setUsername = function (value) {
-        usernameInput.value = value;
+        this.usernameInput.value = value;
     };
 
 }
