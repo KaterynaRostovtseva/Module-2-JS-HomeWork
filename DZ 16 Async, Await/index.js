@@ -23,75 +23,75 @@ let nextMessageId = 0;
 
 // Замінені нутрощі jsonPost на код, який використовує fetch замість XMLHttpRequest.
 function jsonPost(url, data) {
-    return new Promise((resolve, reject) => {
-        fetch(url, {
-            method: 'POST',
-            // headers: {
-            //     'Content-Type': 'application/json',
-            // },
-            body: JSON.stringify(data),
-        })
-        .then(response => {
-          console.log(response)
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
-        .then(jsonData => {
-            resolve(jsonData);
-        })
-        .catch(error => {
-            reject(error);
-        });
-    });
+	return new Promise((resolve, reject) => {
+		fetch(url, {
+			method: 'POST',
+			// headers: {
+			//     'Content-Type': 'application/json',
+			// },
+			body: JSON.stringify(data),
+		})
+			.then(response => {
+				console.log(response)
+				if (!response.ok) {
+					throw new Error('Network response was not ok');
+				}
+				return response.json();
+			})
+			.then(jsonData => {
+				resolve(jsonData);
+			})
+			.catch(error => {
+				reject(error);
+			});
+	});
 }
 
-jsonPost("http://students.a-level.com.ua:10012", {func: 'addMessage', nick: "Katy", message: 'hello'})
+jsonPost("http://students.a-level.com.ua:10012", { func: 'addMessage', nick: "Katy", message: 'hello' })
 
- // Функція для відправки повідомлення
+// Функція для відправки повідомлення
 async function sendMessage(nick, message) {
-  const response = await jsonPost("http://students.a-level.com.ua:10012", { func: 'addMessage', nick: nick, message: message});
-  nextMessageId = response.nextMessageId;
+	const response = await jsonPost("http://students.a-level.com.ua:10012", { func: 'addMessage', nick: nick, message: message });
+	nextMessageId = response.nextMessageId;
 }
 // Функція отримує повідомлення і малює їх у DOM
 async function getMessages() {
-  const response = await jsonPost("http://students.a-level.com.ua:10012", { func: 'getMessages', messageId: nextMessageId });
-  const messageContainer = document.getElementById('messageContainer');
+	const response = await jsonPost("http://students.a-level.com.ua:10012", { func: 'getMessages', messageId: nextMessageId });
+	const messageContainer = document.getElementById('messageContainer');
 
-  response.data.forEach(message => {
-	const div = document.createElement('div');
-	div.classList.add('message');
+	response.data.forEach(message => {
+		const div = document.createElement('div');
+		div.classList.add('message');
 
-	const timestamp = new Date(message.timestamp);
-	const formattedTimestamp = `${timestamp.getHours()}:${timestamp.getMinutes()}:${timestamp.getSeconds()}`;
+		const timestamp = new Date(message.timestamp);
+		const formattedTimestamp = `${timestamp.getHours()}:${timestamp.getMinutes()}:${timestamp.getSeconds()}`;
 
-	div.innerHTML = `<strong>${message.nick}:</strong> ${message.message} (${formattedTimestamp})`;
-	messageContainer.appendChild(div);
-  });
+		div.innerHTML = `<strong>${message.nick}:</strong> ${message.message} (${formattedTimestamp})`;
+		messageContainer.appendChild(div);
+	});
 
-  if (response.data.length > 0) {
-	nextMessageId = response.nextMessageId;
-  }
+	if (response.data.length > 0) {
+		nextMessageId = response.nextMessageId;
+	}
 }
 
 // Функція запуск по кнопці.
 async function sendAndCheck() {
-  const nick = document.getElementById('nick').value;
-  const message = document.getElementById('message').value;
-  await sendMessage(nick, message);
-  await getMessages();
+	const nick = document.getElementById('nick').value;
+	const message = document.getElementById('message').value;
+	await sendMessage(nick, message);
+	await getMessages();
 }
 
 function delay(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
+	return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 async function checkLoop() {
-  while (true) {
-	await getMessages();
-	await delay(5000); // перевірка кожні 5 секунд
-  }
+	while (true) {
+		await getMessages();
+		await delay(5000); // перевірка кожні 5 секунд
+	}
 }
 
 getMessages();
