@@ -1,0 +1,92 @@
+html,
+body {
+    margin: 0;
+    padding: 0;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-left: 20px;
+    padding-right: 20px;
+    background-color: #d1d2d6;
+}
+
+a{
+    display: flex;
+    justify-content: end;
+    flex-direction: column;
+    margin: 10px;
+    text-decoration: none;
+  
+}
+
+.basket {
+    position: relative;
+    margin: 20px;
+}
+
+.iconBasket {
+    
+    color: #323247;
+    cursor: pointer;
+}
+
+.basket span {
+    background-color: red;
+    border-radius: 50%;
+    color: #fff;
+    position: absolute;
+    left: 70%;
+    top:5px;
+    padding: 3px 10px;
+}
+.mainContainer{
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+  
+}
+
+.catalog{
+    width: 70%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+
+}
+.imgGood{
+    margin: 10px;
+    border: 1px solid black;
+    padding: 20px;
+    width: 300px;
+    height: 300px;
+}
+.iconBasket{
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+}
+.spanPrice{
+    font-size: 18px;
+    font-weight: 700;
+    margin: 0;
+    border: none;
+    padding: 0px;
+}
+h1{
+    text-align: center;
+}
+.btn{
+    width: 200px;
+    height: 40px;
+}
+.goods{
+    display: flex;
+    align-items: center;
+}
+.spanPrice{
+    margin: 20px;
+}
