@@ -300,7 +300,7 @@ store.subscribe(() => {
     categoryTitle.textContent = name;
     main.appendChild(categoryTitle);
 
-    if (Array.isArray(goods) && goods.length > 0) {
+    if (Array.isArray(goods)) {
       for (const { _id, name, price, images } of goods) {
         const goodsContainer = document.createElement('div');
         goodsContainer.classList.add('goodsContainer');
@@ -635,26 +635,45 @@ const actionRegister = (login, password) =>
 const actionAuthLogin = token => ({ type: 'AUTH_LOGIN', token });
 const actionAuthLogout = () => ({ type: 'AUTH_LOGOUT' });
 
-const actionFullLogin = (login, password) =>
-  async dispatch => {
-    let token = await dispatch(actionLogin(login, password));
-    console.log(JSON.stringify(token))
-    if (jwtDecode(token)) {
-      dispatch(actionAuthLogin(token));
-      window.history.go(-1);
-    }
-    else
-      console.log('Логін або пароль не вірний!');
-  };
+const actionFullLogin = (login, password) => async dispatch => {
+  try {
+      let token = await dispatch(actionLogin(login, password));
+      console.log(JSON.stringify(token));
 
-const actionFullRegister = (login, password) =>
-  async dispatch => {
-    const user = await dispatch(actionRegister(login, password));
-    if (user) {
-      dispatch(actionFullLogin(login, password));
-      window.history.go(-1);
-    }
-  };
+      if (jwtDecode(token)) {
+          dispatch(actionAuthLogin(token));
+          window.history.go(-1);
+      } else {
+          displayErrorMessage('Логін або пароль не вірний!');
+      }
+  } catch (error) {
+      displayErrorMessage('Помилка: ' + error.message);
+  }
+};
+
+// Функція для відображення повідомлення про помилку 
+const displayErrorMessage = (message) => {
+  const errorMessageElement = document.createElement('div');
+  errorMessageElement.textContent = message;
+  errorMessageElement.style.color = 'red';
+  errorMessageElement.style.marginTop = '10px';
+
+  main.appendChild(errorMessageElement);
+
+  setTimeout(() => {
+      main.removeChild(errorMessageElement);
+  }, 3000);
+};
+
+const actionFullRegister = (login, password) => async dispatch => {
+  try {
+      const user = await dispatch(actionRegister(login, password));
+      return user
+  } catch (error) {
+      console.error("Помилка реєстрації:", error);
+      return displayErrorMessage('Реєстрація не вдалася');
+  }
+};
 
 function Password(parent) {
   this.parent = parent;
@@ -667,22 +686,6 @@ function Password(parent) {
   this.passwordInput.addEventListener('input', () => {
     if (this.onChange) {
       this.onChange(this.passwordInput.value);
-    }
-  });
-
-  const inputCheck = document.createElement('input');
-  inputCheck.type = 'checkbox';
-  parent.append(inputCheck);
-
-  const toggleLabel = document.createElement('label');
-  toggleLabel.innerText = 'Показати пароль';
-  parent.append(toggleLabel);
-
-  inputCheck.addEventListener('change', () => {
-    this.passwordInput.type = inputCheck.checked ? 'text' : 'password';
-    toggleLabel.innerText = inputCheck.checked ? 'Скрити пароль' : 'Показати пароль';
-    if (this.onOpenChange) {
-      this.onOpenChange(inputCheck.checked);
     }
   });
 
@@ -709,48 +712,60 @@ function Password(parent) {
 }
 
 function LoginForm(parent) {
-  const password = new Password(parent, true);
-
   const usernameInput = document.createElement('input');
   usernameInput.type = 'text';
   usernameInput.placeholder = 'Логин';
 
+  const password = new Password(parent);  
+
   this.loginButton = document.createElement('button');
-
-  this.loginButton.disabled = true; // Початково вимикаємо кнопку
-
-  this.register = function () {
-    this.loginButton.addEventListener('click', event => {
-      const login = usernameInput.value;
-      const pas = password.getValue();
-      store.dispatch(actionFullRegister(login, pas));
-    });
-  }
-
-  this.login = function () {
-    this.loginButton.addEventListener('click', event => {
-      const login = usernameInput.value;
-      const pas = password.getValue();
-      store.dispatch(actionFullLogin(login, pas));
-    });
-  }
+  this.loginButton.disabled = true;
 
   this.loginButtonState = function () {
-    let btn = this.loginButton;
-    usernameInput.addEventListener('input', function (event) {
-
-      btn.disabled = (usernameInput.value == '' || password.getValue() === '');
-    });
-    password.passwordInput.addEventListener('input', function (event) {
-
-      btn.disabled = (password.getValue() === '' || usernameInput.value == '');
-    });
-
+      let btn = this.loginButton;
+      usernameInput.addEventListener('input', function (event) {
+          btn.disabled = (usernameInput.value == '' || password.getValue() === '');
+      });
+      password.passwordInput.addEventListener('input', function (event) {
+          btn.disabled = (password.getValue() === '' || usernameInput.value == '');
+      });
   };
-  parent.appendChild(usernameInput);
-  parent.appendChild(this.loginButton);
 
-};
+  this.register = () => {
+      this.loginButton.addEventListener('click', event => {
+        const login = usernameInput.value;
+        const pas = password.getValue();
+        store.dispatch(actionFullRegister(login, pas));
+      });
+    };
+  
+    this.login = () => {
+      this.loginButton.addEventListener('click', event => {
+        const login = usernameInput.value;
+        const pas = password.getValue();
+        store.dispatch(actionFullLogin(login, pas));
+      });
+    };
+
+  const checkboxContainer = document.createElement('div')
+  const inputCheck = document.createElement('input');
+  inputCheck.type = 'checkbox';
+  checkboxContainer.appendChild(inputCheck)
+
+  const toggleLabel = document.createElement('label');
+  toggleLabel.innerText = 'Показати пароль';
+  checkboxContainer.appendChild(toggleLabel)
+
+  inputCheck.addEventListener('change', () => {
+      password.setOpen(inputCheck.checked);
+      toggleLabel.innerText = inputCheck.checked ? 'Скрити пароль' : 'Показати пароль';
+  });
+
+  parent.appendChild(usernameInput);
+  parent.appendChild(password.passwordInput);
+  parent.append(checkboxContainer);
+  parent.appendChild(this.loginButton);
+}
 
 const userBlock = () => {
   const authSection = document.getElementById('authSection'); 
@@ -761,6 +776,7 @@ const userBlock = () => {
   buttonLogout.textContent = 'Вийти';
   buttonLogout.onclick = () => {
     store.dispatch(actionAuthLogout());
+    window.location.href = '/';
   };
 
   const buttonLogin = document.createElement('a');
@@ -924,9 +940,6 @@ store.subscribe(() => {
     main.append(table);
   }
 });
-
-
-
 
 window.onhashchange = () => {
   const [, route, _id] = location.hash.split('/');
